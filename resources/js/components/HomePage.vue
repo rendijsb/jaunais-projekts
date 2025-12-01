@@ -2,91 +2,117 @@
     <div class="relative w-full min-h-screen bg-stone-50 font-sans text-stone-800 selection:bg-indigo-500/30">
         <Navbar @open-contact="isContactModalOpen = true" />
 
-        <section id="home" class="relative w-full h-screen overflow-hidden bg-stone-50">
+        <section id="home" class="relative w-full min-h-screen overflow-hidden bg-stone-50">
             <div class="absolute inset-0 overflow-hidden pointer-events-none">
                 <div class="absolute top-[-20%] right-[-10%] w-[800px] h-[800px] bg-indigo-200/30 rounded-full blur-[120px] animate-float"></div>
                 <div class="absolute bottom-[-20%] left-[-10%] w-[800px] h-[800px] bg-orange-100/50 rounded-full blur-[120px] animate-float-delayed"></div>
                 <div class="absolute top-[40%] left-[20%] w-[500px] h-[500px] bg-rose-100/30 rounded-full blur-[100px] animate-pulse-slow"></div>
-
                 <div class="absolute inset-0 opacity-[0.03] bg-[url('data:image/svg+xml,%3Csvg viewBox=\'0 0 200 200\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cfilter id=\'noiseFilter\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'0.65\' numOctaves=\'3\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23noiseFilter)\'/%3E%3C/svg%3E')]"></div>
             </div>
 
-            <div class="relative z-10 w-full h-full flex flex-col md:flex-row pt-24 md:pt-0">
-
-                <div class="w-full md:w-5/12 h-full px-8 md:pl-20 flex flex-col justify-center relative z-20 pointer-events-none">
-                    <div class="mb-16 pointer-events-auto">
-                        <div class="inline-block px-3 py-1 mb-6 rounded-full bg-white/50 border border-stone-200 backdrop-blur-sm">
+            <div class="relative z-10 h-screen hidden lg:flex flex-col">
+                <div class="flex-shrink-0 pt-16 pb-2 px-8 xl:px-16 relative z-20">
+                    <div class="max-w-4xl mx-auto text-center">
+                        <div class="inline-block px-3 py-1 mb-2 rounded-full bg-white/50 border border-stone-200 backdrop-blur-sm">
                             <span class="text-xs font-semibold tracking-widest uppercase text-stone-500">Premium Dzīvesveids</span>
                         </div>
-                        <h1 class="text-6xl md:text-8xl font-light mb-6 tracking-tight text-stone-900 leading-[0.9]">
-                            Skyline<br/>
+                        <h1 class="text-4xl xl:text-5xl font-light mb-2 tracking-tight text-stone-900 leading-[0.95]">
+                            Skyline
                             <span class="font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600">Tornis</span>
                         </h1>
-                        <p class="text-stone-600 text-lg md:text-xl max-w-md leading-relaxed font-light">
-                            Izbaudiet luksusa dzīvi virsotnē. Atklājiet jaunu perspektīvu Rīgas panorāmā.
+                        <p class="text-stone-600 text-base max-w-lg mx-auto leading-relaxed font-light mb-3">
+                            Izbaudiet luksusa dzīvi virsotnē. Izvēlieties savu stāvu un atklājiet jaunas iespējas.
                         </p>
-                    </div>
 
-                    <transition
-                        enter-active-class="transition duration-500 ease-out"
-                        enter-from-class="opacity-0 translate-y-8 scale-95"
-                        enter-to-class="opacity-100 translate-y-0 scale-100"
-                        leave-active-class="transition duration-300 ease-in"
-                        leave-from-class="opacity-100 translate-y-0 scale-100"
-                        leave-to-class="opacity-0 translate-y-8 scale-95"
-                    >
-                        <div v-if="activeFloorData" class="pointer-events-auto backdrop-blur-xl bg-white/80 border border-white/60 rounded-3xl p-8 shadow-2xl shadow-indigo-900/5 ring-1 ring-white/50 relative overflow-hidden group">
-                            <div class="absolute -top-20 -right-20 w-40 h-40 bg-indigo-500/10 rounded-full blur-3xl group-hover:bg-indigo-500/20 transition-colors duration-500"></div>
-
-                            <div class="relative z-10">
-                                <div class="flex items-center justify-between mb-6">
-                                    <div>
-                                        <span class="text-sm text-stone-400 uppercase tracking-wider font-medium">Izvēlētais Stāvs</span>
-                                        <h2 class="text-4xl font-light text-stone-800 mt-1">{{ activeFloorData.level }}.</h2>
-                                    </div>
-                                    <span class="px-4 py-1.5 rounded-full text-xs font-bold tracking-wide uppercase bg-stone-900 text-white shadow-lg shadow-stone-900/20">
-                                        {{ activeFloorData.status }}
-                                    </span>
-                                </div>
-
-                                <div class="space-y-5">
-                                    <div class="grid grid-cols-2 gap-4">
-                                        <div class="p-3 rounded-2xl bg-stone-50 border border-stone-100">
-                                            <span class="block text-xs text-stone-400 mb-1">Pieejamība</span>
-                                            <span class="block text-lg font-semibold text-stone-800">{{ activeFloorData.units }}</span>
-                                        </div>
-                                        <div class="p-3 rounded-2xl bg-stone-50 border border-stone-100">
-                                            <span class="block text-xs text-stone-400 mb-1">Cena no</span>
-                                            <span class="block text-lg font-semibold text-stone-800">{{ activeFloorData.price.split(' - ')[0] }}</span>
-                                        </div>
-                                    </div>
-
-                                    <div class="pt-2">
-                                        <p class="text-sm text-stone-600 leading-relaxed font-medium">
-                                            {{ activeFloorData.description }}
-                                        </p>
-                                    </div>
-
-                                    <button @click="isContactModalOpen = true" class="w-full py-4 bg-stone-900 text-white rounded-2xl font-semibold hover:bg-indigo-600 transition-all duration-300 shadow-xl shadow-stone-900/10 hover:shadow-indigo-600/20 hover:-translate-y-0.5 flex items-center justify-center group/btn">
-                                        <span>Rezervēt Apskati</span>
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-2 group-hover/btn:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
+                        <div class="flex flex-wrap justify-center gap-3">
+                            <button
+                                @click="isContactModalOpen = true"
+                                class="px-5 py-2.5 bg-stone-900 text-white rounded-xl font-semibold hover:bg-indigo-600 transition-all duration-300 shadow-lg shadow-stone-900/10 hover:shadow-indigo-600/20 flex items-center gap-2 text-sm"
+                            >
+                                <span>Sazināties</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                </svg>
+                            </button>
+                            <a
+                                href="#about"
+                                class="px-5 py-2.5 bg-white/50 text-stone-700 rounded-xl font-semibold hover:bg-white transition-all duration-300 border border-stone-200 text-sm"
+                            >
+                                Uzzināt vairāk
+                            </a>
                         </div>
-                    </transition>
+                    </div>
                 </div>
 
-                <div class="w-full md:w-7/12 h-1/2 md:h-full relative flex items-center justify-center md:translate-x-10">
+                <div class="flex-1 px-8 xl:px-16 pb-24 min-h-0">
                     <InteractiveBuilding
                         :hovered-floor="hoveredFloor"
                         :selected-floor="selectedFloor"
+                        :floors-data="floorsData"
                         @hover-floor="handleHoverFloor"
                         @select-floor="handleSelectFloor"
-                        class="w-full h-full scale-90 md:scale-110 origin-center transition-transform duration-1000 ease-out"
+                        @open-contact="isContactModalOpen = true"
+                        class="w-full h-full"
                     />
+                </div>
+            </div>
+
+            <div class="relative z-10 lg:hidden flex flex-col h-screen">
+                <div class="flex-shrink-0 px-4 sm:px-6 md:px-12 pt-20 sm:pt-24 pb-3 sm:pb-4 text-center">
+                    <div class="inline-block px-2.5 py-1 mb-3 sm:mb-4 rounded-full bg-white/50 border border-stone-200 backdrop-blur-sm">
+                        <span class="text-[10px] sm:text-xs font-semibold tracking-widest uppercase text-stone-500">Premium Dzīvesveids</span>
+                    </div>
+                    <h1 class="text-3xl sm:text-4xl md:text-5xl font-light mb-2 sm:mb-3 tracking-tight text-stone-900 leading-[0.95]">
+                        Skyline
+                        <span class="font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600">Tornis</span>
+                    </h1>
+                    <p class="text-stone-600 text-sm sm:text-base md:text-lg max-w-sm sm:max-w-md mx-auto leading-relaxed font-light mb-3 sm:mb-4">
+                        Izvēlieties savu stāvu un atklājiet jaunas iespējas.
+                    </p>
+
+                    <div class="flex flex-wrap justify-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+                        <button
+                            @click="isContactModalOpen = true"
+                            class="px-4 sm:px-5 py-2 sm:py-2.5 bg-stone-900 text-white rounded-lg sm:rounded-xl font-semibold hover:bg-indigo-600 transition-all duration-300 shadow-lg shadow-stone-900/10 flex items-center gap-2 text-xs sm:text-sm"
+                        >
+                            <span>Sazināties</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 sm:h-4 sm:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                            </svg>
+                        </button>
+                        <a
+                            href="#about"
+                            class="px-4 sm:px-5 py-2 sm:py-2.5 bg-white/50 text-stone-700 rounded-lg sm:rounded-xl font-semibold hover:bg-white transition-all duration-300 border border-stone-200 text-xs sm:text-sm"
+                        >
+                            Uzzināt vairāk
+                        </a>
+                    </div>
+
+                    <div class="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-indigo-50 border border-indigo-100">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 sm:h-4 sm:w-4 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122" />
+                        </svg>
+                        <span class="text-[10px] sm:text-xs font-medium text-indigo-600">Spiediet uz stāva</span>
+                    </div>
+                </div>
+
+                <div class="flex-1 relative px-2 sm:px-4 pb-4">
+                    <InteractiveBuilding
+                        :hovered-floor="hoveredFloor"
+                        :selected-floor="selectedFloor"
+                        :floors-data="floorsData"
+                        @hover-floor="handleHoverFloor"
+                        @select-floor="handleSelectFloor"
+                        @open-contact="isContactModalOpen = true"
+                        class="w-full h-full"
+                    />
+                </div>
+            </div>
+
+            <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex-col items-center gap-2 text-stone-400 z-20 hidden lg:flex">
+                <span class="text-[10px] uppercase tracking-widest">Ritināt</span>
+                <div class="w-5 h-8 rounded-full border-2 border-stone-300 flex items-start justify-center p-1">
+                    <div class="w-1 h-2 bg-stone-400 rounded-full animate-bounce"></div>
                 </div>
             </div>
         </section>
@@ -104,7 +130,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref } from 'vue';
 import Navbar from './Navbar.vue';
 import InteractiveBuilding from './InteractiveBuilding.vue';
 import AboutSection from './AboutSection.vue';
@@ -117,48 +143,43 @@ const hoveredFloor = ref(null);
 const selectedFloor = ref(null);
 const isContactModalOpen = ref(false);
 
-const floors = {
+const floorsData = {
     1: {
         level: 1,
         status: 'Komerctelpas',
         units: '4 Vietas',
         price: '€2.5M - €5M',
-        description: 'Premium klases tirdzniecības telpas ar augstu apmeklētāju plūsmu un tiešu piekļuvi no ielas. Ideāli piemērotas vadošajiem veikaliem.'
+        description: 'Premium klases tirdzniecības telpas ar augstu apmeklētāju plūsmu un tiešu piekļuvi no ielas.'
     },
     2: {
         level: 2,
         status: 'Biroji',
         units: '8 Biroji',
         price: '€1.2M - €3M',
-        description: 'Mūsdienīgi biroji ar atvērtu plānojumu, bagātīgu dabisko apgaismojumu un vismodernākajām komunikācijām.'
+        description: 'Mūsdienīgi biroji ar atvērtu plānojumu, bagātīgu dabisko apgaismojumu.'
     },
     3: {
         level: 3,
         status: 'Dzīvokļi',
         units: '6 Dzīvokļi',
         price: '€850K - €2.1M',
-        description: 'Luksusa dzīvokļi ar panorāmas skatu uz pilsētu, privātiem balkoniem un ekskluzīvām ērtībām.'
+        description: 'Luksusa dzīvokļi ar panorāmas skatu uz pilsētu un privātiem balkoniem.'
     },
     4: {
         level: 4,
         status: 'Penthausi',
         units: '4 Penthausi',
         price: '€3.5M - €6M',
-        description: 'Ekskluzīvi penthausi ar plašām terasēm, privātu liftu un 360° panorāmas skatu uz Rīgas vēsturisko centru.'
+        description: 'Ekskluzīvi penthausi ar plašām terasēm un 360° panorāmas skatu.'
     },
     5: {
         level: 5,
         status: 'Sky Lounge',
         units: '2 Rezidences',
         price: '€8M - €12M',
-        description: 'Izcilākās rezidences ar privātu baseinu, SPA zonu un nepārspējamu skatu. Augstākā līmeņa luksuss.'
+        description: 'Izcilākās rezidences ar privātu baseinu, SPA zonu un nepārspējamu skatu.'
     }
 };
-
-const activeFloorData = computed(() => {
-    const floor = hoveredFloor.value || selectedFloor.value;
-    return floor ? floors[floor] : null;
-});
 
 const handleHoverFloor = (floorNumber) => {
     hoveredFloor.value = floorNumber;
