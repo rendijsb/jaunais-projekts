@@ -1,0 +1,60 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+      args:
+        UID: ${UID:-1000}
+        GID: ${GID:-1000}
+    container_name: jaunais-projekts-app-dev
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+      - "5173:5173"
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - DB_CONNECTION=mysql
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_DATABASE=${DB_DATABASE:-laravel}
+      - DB_USERNAME=${DB_USERNAME:-laravel}
+      - DB_PASSWORD=${DB_PASSWORD:-secret}
+    depends_on:
+      mysql:
+        condition: service_healthy
+    volumes:
+      - .:/var/www/html
+      - /var/www/html/vendor
+      - /var/www/html/node_modules
+    networks:
+      - app-network
+
+  mysql:
+    image: mysql:8.0
+    container_name: jaunais-projekts-mysql-dev
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE:-laravel}
+      MYSQL_USER: ${DB_USERNAME:-laravel}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-secret}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-rootsecret}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data-dev:/var/lib/mysql
+    networks:
+      - app-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${DB_ROOT_PASSWORD:-rootsecret}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mysql-data-dev:
