@@ -1,0 +1,13 @@
+.git
+.gitignore
+.gitattributes
+.idea
+.vscode
+*.swp
+*.swo
+node_modules
+vendor
+.env
+*.log
+.DS_Store
+.playwright-mcp
