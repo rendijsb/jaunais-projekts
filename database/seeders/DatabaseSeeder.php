@@ -11,15 +11,12 @@ class DatabaseSeeder extends Seeder
 {
     use WithoutModelEvents;
 
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
         User::firstOrCreate([
-            'name' => 'Administrator',
-            'email' => 'test@admin.com',
-            'password' => Hash::make('123qwe@W'),
+            User::NAME => 'Administrator',
+            User::EMAIL => 'test@admin.com',
+            User::PASSWORD => Hash::make('123qwe@W'),
         ]);
     }
 }
