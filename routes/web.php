@@ -26,7 +26,7 @@ Route::middleware('auth')->prefix('admin')->group(function () {
         ->name('admin.logout');
 
     Route::prefix('api')->group(function () {
-        Route::get('/properties', [PropertyController::class, 'index']);
+        Route::get('/properties', [PropertyController::class, 'getAll']);
         Route::put('/properties/{property}', [PropertyController::class, 'update']);
         Route::patch('/properties/{property}/status', [PropertyController::class, 'updateStatus']);
     });
