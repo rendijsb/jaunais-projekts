@@ -3,11 +3,11 @@
         <div class="w-full max-w-md">
             <div class="text-center mb-8">
                 <h1 class="text-3xl font-bold text-stone-800">Modern Living</h1>
-                <p class="text-stone-500 mt-2">Admin Portal</p>
+                <p class="text-stone-500 mt-2">Administrācijas panelis</p>
             </div>
 
             <div class="glass-panel rounded-2xl p-8">
-                <h2 class="text-xl font-semibold text-stone-800 mb-6">Sign in to your account</h2>
+                <h2 class="text-xl font-semibold text-stone-800 mb-6">Pieslēgties savam kontam</h2>
 
                 <div v-if="error" class="mb-6 p-4 rounded-lg bg-red-50 border border-red-200">
                     <p class="text-sm text-red-600">{{ error }}</p>
@@ -16,7 +16,7 @@
                 <form @submit.prevent="handleSubmit" class="space-y-5">
                     <div>
                         <label for="email" class="block text-sm font-medium text-stone-700 mb-2">
-                            Email address
+                            E-pasta adrese
                         </label>
                         <input
                             type="email"
@@ -35,7 +35,7 @@
 
                     <div>
                         <label for="password" class="block text-sm font-medium text-stone-700 mb-2">
-                            Password
+                            Parole
                         </label>
                         <input
                             type="password"
@@ -59,7 +59,7 @@
                                 class="w-4 h-4 rounded border-stone-300 text-amber-600
                                        focus:ring-amber-500/50 focus:ring-offset-0"
                             >
-                            <span class="text-sm text-stone-600">Remember me</span>
+                            <span class="text-sm text-stone-600">Atcerēties mani</span>
                         </label>
                     </div>
 
@@ -74,14 +74,14 @@
                                shadow-lg shadow-stone-900/20
                                disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                     >
-                        <span v-if="loading">Signing in...</span>
-                        <span v-else>Sign in</span>
+                        <span v-if="loading">Piesakās...</span>
+                        <span v-else>Pieslēgties</span>
                     </button>
                 </form>
             </div>
 
             <p class="text-center text-sm text-stone-500 mt-8">
-                &copy; {{ currentYear }} Modern Living. All rights reserved.
+                &copy; {{ currentYear }} Modern Living. Visas tiesības aizsargātas.
             </p>
         </div>
     </div>
@@ -119,13 +119,13 @@ const handleSubmit = async () => {
         const data = await response.json();
 
         if (!response.ok) {
-            error.value = data.message || 'Invalid credentials.';
+            error.value = data.message || 'Nepareizi pieslēgšanās dati.';
             return;
         }
 
         window.location.href = data.redirect || '/admin/dashboard';
     } catch (e) {
-        error.value = 'An error occurred. Please try again.';
+        error.value = 'Radās kļūda. Lūdzu, mēģiniet vēlreiz.';
     } finally {
         loading.value = false;
     }
