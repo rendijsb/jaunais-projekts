@@ -1,6 +1,5 @@
 <template>
     <div>
-        <!-- Page Header -->
         <div class="mb-8">
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div>
@@ -24,7 +23,6 @@
             </div>
         </div>
 
-        <!-- Filters Card -->
         <div class="bg-white rounded-xl border border-stone-200 p-4 mb-6 shadow-sm">
             <div class="flex flex-wrap items-center gap-4">
                 <div class="flex items-center gap-2">
@@ -79,7 +77,6 @@
             </div>
         </div>
 
-        <!-- Loading State -->
         <div v-if="loading" class="bg-white rounded-xl border border-stone-200 p-16 text-center shadow-sm">
             <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-amber-50 mb-4">
                 <svg class="w-6 h-6 text-amber-500 animate-spin" fill="none" viewBox="0 0 24 24">
@@ -90,7 +87,6 @@
             <p class="text-stone-600 font-medium">Ielādē īpašumus...</p>
         </div>
 
-        <!-- Properties Table -->
         <div v-else class="bg-white rounded-xl border border-stone-200 shadow-sm overflow-hidden">
             <div class="overflow-x-auto">
                 <table class="w-full">
@@ -255,7 +251,6 @@
             </div>
         </div>
 
-        <!-- Edit Modal -->
         <PropertyEditModal
             v-if="editingProperty"
             :property="editingProperty"
@@ -270,7 +265,6 @@ import { ref, reactive, onMounted } from 'vue';
 import PropertyEditModal from './PropertyEditModal.vue';
 import { PropertyStatus, PropertyStatusOptions } from '@/enums/PropertyStatus.js';
 
-// Sort Icon Component
 const SortIcon = {
     props: {
         active: Boolean,
@@ -315,7 +309,7 @@ const formatPrice = (price) => {
         style: 'currency',
         currency: 'EUR',
         minimumFractionDigits: 0
-    }).format(price);
+    }).format(price / 100);
 };
 
 const buildQueryParams = () => {

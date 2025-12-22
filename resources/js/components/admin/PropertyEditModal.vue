@@ -282,7 +282,7 @@ watch(() => props.property, (newProperty) => {
         total_area: newProperty.total_area,
         terrace_area: newProperty.terrace_area,
         balcony_area: newProperty.balcony_area,
-        price: newProperty.price,
+        price: newProperty.price / 100,
         status: newProperty.status
     });
 }, { immediate: true });
@@ -299,7 +299,10 @@ const handleSubmit = async () => {
                 'Accept': 'application/json',
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
             },
-            body: JSON.stringify(form)
+            body: JSON.stringify({
+                ...form,
+                price: Math.round(form.price * 100)
+            })
         });
 
         const data = await response.json();

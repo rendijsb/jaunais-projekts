@@ -1,105 +1,20 @@
 <template>
-    <div class="hidden lg:flex w-full h-full items-stretch" ref="containerRef">
-        <div class="w-72 flex-shrink-0 flex items-center pr-6">
-            <div class="w-full">
-                <div
-                    v-if="activeFloorData && showCard"
-                    class="backdrop-blur-xl bg-white/95 border border-white/60 rounded-2xl p-5 shadow-2xl shadow-black/10 ring-1 ring-black/5 transition-opacity duration-200"
-                >
-                    <div class="flex items-start justify-between mb-3">
-                        <div>
-                            <span class="text-xs text-stone-400 uppercase tracking-wider font-medium">Stāvs</span>
-                            <h3 class="text-2xl font-light text-stone-800">{{ activeFloorData.level }}.</h3>
-                        </div>
-                        <span class="px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wide uppercase bg-stone-900 text-white">
-                            {{ activeFloorData.status }}
-                        </span>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-2 mb-3">
-                        <div class="p-2 rounded-xl bg-stone-50 border border-stone-100">
-                            <span class="block text-[10px] text-stone-400 mb-0.5">Pieejamība</span>
-                            <span class="block text-sm font-semibold text-stone-800">{{ activeFloorData.units }}</span>
-                        </div>
-                        <div class="p-2 rounded-xl bg-stone-50 border border-stone-100">
-                            <span class="block text-[10px] text-stone-400 mb-0.5">Cena no</span>
-                            <span class="block text-sm font-semibold text-stone-800">{{ activeFloorData.price.split(' - ')[0] }}</span>
-                        </div>
-                    </div>
-
-                    <p class="text-xs text-stone-500 leading-relaxed mb-3">
-                        {{ activeFloorData.description }}
-                    </p>
-
-                    <button
-                        @click.stop="$emit('open-contact')"
-                        class="w-full py-2.5 bg-stone-900 text-white text-sm rounded-xl font-semibold hover:bg-indigo-600 transition-all duration-300 flex items-center justify-center gap-2"
-                    >
-                        <span>Uzzināt vairāk</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                        </svg>
-                    </button>
-                </div>
-                <div v-else class="border-2 border-dashed border-stone-200 rounded-2xl p-5 text-center transition-opacity duration-200">
-                    <div class="w-12 h-12 mx-auto mb-3 rounded-full bg-stone-100 flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-stone-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                        </svg>
-                    </div>
-                    <p class="text-sm text-stone-400 font-medium">Izvēlieties stāvu</p>
-                    <p class="text-xs text-stone-300 mt-1">Virziet kursoru uz ēkas</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="flex-1 flex items-end justify-center h-full min-h-0">
-            <div class="relative flex items-end justify-center h-full w-full" ref="imageContainerRef">
-                <img
-                    ref="imageRef"
-                    src="/images/building.jpg"
-                    alt="Luxury Building"
-                    class="max-h-full max-w-full w-auto object-contain drop-shadow-2xl"
-                    @load="onImageLoad"
-                />
-
-                <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-[60%] h-16 bg-indigo-500/20 blur-[40px] rounded-[100%] z-0"></div>
-
-                <svg
-                    v-if="imageLoaded && imageRef"
-                    class="absolute z-30"
-                    :style="svgStyle"
-                    viewBox="0 0 3840 2160"
-                    preserveAspectRatio="none"
-                >
-                    <polygon
-                        v-for="floor in [5, 4, 3, 2, 1]"
-                        :key="floor"
-                        :points="floors[floor]"
-                        :class="getFloorClass(floor)"
-                        @mouseenter="handleFloorHover(floor, $event)"
-                        @mouseleave="handleFloorLeave"
-                        @click="handleFloorClick(floor)"
-                    />
-                </svg>
-            </div>
-        </div>
-    </div>
-
-    <div class="lg:hidden relative w-full h-full flex items-center justify-center">
-        <div class="relative inline-block">
+    <div class="relative w-full" ref="containerRef">
+        <div class="relative w-full overflow-hidden" :style="wrapperStyle">
             <img
+                ref="imageRef"
                 src="/images/building.jpg"
                 alt="Luxury Building"
-                class="max-w-full max-h-full object-contain block drop-shadow-2xl"
+                class="absolute inset-0 w-full h-full object-cover object-bottom drop-shadow-2xl transition-all duration-500"
                 @load="onImageLoad"
             />
 
-            <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-[80%] h-20 bg-indigo-500/20 blur-[50px] rounded-[100%] z-0"></div>
+            <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-[70%] h-32 bg-indigo-500/10 blur-[80px] rounded-[100%] z-0 pointer-events-none"></div>
 
             <svg
                 v-if="imageLoaded"
-                class="absolute top-0 left-0 w-full h-full z-30"
+                class="absolute z-30 transition-opacity duration-300"
+                :style="svgStyle"
                 viewBox="0 0 3840 2160"
                 preserveAspectRatio="none"
             >
@@ -108,79 +23,110 @@
                     :key="floor"
                     :points="floors[floor]"
                     :class="getFloorClass(floor)"
+                    @mouseenter="handleFloorHover(floor)"
+                    @mouseleave="handleFloorLeave"
                     @click="handleFloorClick(floor)"
-                    @touchstart.passive="handleFloorClick(floor)"
                 />
             </svg>
         </div>
-    </div>
 
-    <Teleport to="body">
-        <transition
-            enter-active-class="transition duration-300 ease-out"
-            enter-from-class="translate-y-full"
-            enter-to-class="translate-y-0"
-            leave-active-class="transition duration-200 ease-in"
-            leave-from-class="translate-y-0"
-            leave-to-class="translate-y-full"
-        >
-            <div
-                v-if="activeFloorData && showCard && isMobile"
-                class="fixed bottom-0 left-0 right-0 z-[9999] p-3 sm:p-4"
-                style="padding-bottom: max(12px, env(safe-area-inset-bottom));"
+        <Teleport to="body">
+            <Transition
+                enter-active-class="transition duration-500 cubic-bezier(0.16, 1, 0.3, 1)"
+                enter-from-class="opacity-0"
+                enter-to-class="opacity-100"
+                leave-active-class="transition duration-300 ease-in"
+                leave-from-class="opacity-100"
+                leave-to-class="opacity-0"
             >
-                <div class="backdrop-blur-xl bg-white border border-stone-200 rounded-2xl p-3 sm:p-4 shadow-2xl shadow-black/20 max-w-md mx-auto">
-                    <div class="flex items-center justify-between mb-2 sm:mb-3">
-                        <div class="w-8 sm:w-10 h-1 bg-stone-300 rounded-full"></div>
+                <div
+                    v-if="showCard && activeFloorData"
+                    class="fixed inset-0 z-[100] flex items-center justify-center p-4 lg:p-8 bg-black/50 backdrop-blur-sm"
+                    @click.self="closeCard"
+                >
+                    <div class="relative w-full max-w-5xl bg-white/95 backdrop-blur-2xl rounded-[2rem] shadow-2xl shadow-black/20 ring-1 ring-black/5 overflow-hidden flex flex-col max-h-[90vh] overflow-y-auto" @click.stop>
+                        <!-- Close Button -->
                         <button
-                            @click.stop="closeCard"
-                            class="w-6 h-6 sm:w-7 sm:h-7 flex items-center justify-center rounded-full bg-stone-100 text-stone-500 hover:bg-stone-200 transition-colors"
+                            @click.prevent.stop="closeCard"
+                            type="button"
+                            class="absolute top-4 right-4 z-20 w-10 h-10 flex items-center justify-center rounded-full bg-white hover:bg-stone-100 text-stone-600 hover:text-stone-900 transition-all duration-200 shadow-lg cursor-pointer"
                         >
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 sm:h-3.5 sm:w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
                             </svg>
                         </button>
-                    </div>
 
-                    <div class="flex items-start gap-2 sm:gap-3 mb-2 sm:mb-3">
-                        <div class="flex-shrink-0">
-                            <span class="text-[9px] sm:text-[10px] text-stone-400 uppercase tracking-wider font-medium">Stāvs</span>
-                            <h3 class="text-xl sm:text-2xl font-light text-stone-800 leading-tight">{{ activeFloorData.level }}.</h3>
+                        <div class="w-full h-96 sm:h-[32rem] bg-stone-100 relative group overflow-hidden shrink-0">
+                            <div class="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:20px_20px] opacity-50"></div>
+
+                            <div class="absolute inset-0 flex items-center justify-center z-10">
+                                <img
+                                    :src="`/images/floor-plans/floor-${activeFloorData.level}.jpg`"
+                                    :alt="`${activeFloorData.level}. stāva plāns`"
+                                    class="w-full h-full object-contain drop-shadow-lg transition-transform duration-500 group-hover:scale-105"
+                                />
+                            </div>
+
+                            <div class="absolute -bottom-6 -left-4 text-[10rem] font-bold text-stone-200/50 leading-none select-none pointer-events-none">
+                                {{ activeFloorData.level }}
+                            </div>
                         </div>
-                        <div class="flex-1 min-w-0">
-                            <span class="inline-block px-2 py-0.5 sm:py-1 rounded-full text-[9px] sm:text-[10px] font-bold tracking-wide uppercase bg-stone-900 text-white mb-1">
-                                {{ activeFloorData.status }}
-                            </span>
-                            <p class="text-[11px] sm:text-xs text-stone-500 leading-snug line-clamp-2">
-                                {{ activeFloorData.description }}
+
+                        <div class="w-full p-6 sm:p-8 flex flex-col">
+                            <div class="flex items-center justify-between mb-6">
+                                <div>
+                                    <span class="text-sm font-medium text-stone-400 uppercase tracking-wider">Stāvs</span>
+                                    <h2 class="text-4xl sm:text-5xl font-light text-stone-900 -mt-1">
+                                        {{ activeFloorData.level }}<span class="text-stone-300">.</span>
+                                    </h2>
+                                </div>
+                                <div class="text-right">
+                                    <span class="text-sm font-medium text-stone-400 uppercase tracking-wider">Cena no</span>
+                                    <p class="text-2xl sm:text-3xl font-semibold text-stone-900">€{{ formatPrice(activeFloorData.min_price) }}</p>
+                                </div>
+                            </div>
+
+                            <div class="mb-6">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-sm font-medium text-stone-600">Pieejamība</span>
+                                    <span class="text-sm font-semibold text-stone-900">
+                                        <span class="text-emerald-600">{{ activeFloorData.available_units }}</span>
+                                        <span class="text-stone-400">/</span>
+                                        <span>{{ activeFloorData.total_units }}</span>
+                                        <span class="text-stone-400 font-normal ml-1">dzīvokļi pieejami</span>
+                                    </span>
+                                </div>
+                                <div class="h-2 bg-stone-100 rounded-full overflow-hidden">
+                                    <div
+                                        class="h-full bg-gradient-to-r from-emerald-500 to-emerald-400 rounded-full transition-all duration-500"
+                                        :style="{ width: `${(activeFloorData.available_units / activeFloorData.total_units) * 100}%` }"
+                                    ></div>
+                                </div>
+                            </div>
+
+                            <p class="text-sm text-stone-400 mb-6 flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                Virziet kursoru uz stāva plāna, lai apskatītu dzīvokļus
                             </p>
+
+                            <button
+                                @click.stop="$emit('open-contact')"
+                                type="button"
+                                class="w-full py-4 bg-stone-900 text-white text-base rounded-xl font-semibold hover:bg-indigo-600 transition-all duration-300 flex items-center justify-center gap-3 shadow-xl shadow-stone-900/10 hover:shadow-indigo-600/20 transform hover:-translate-y-0.5 cursor-pointer"
+                            >
+                                <span>Sazināties ar mums</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                                </svg>
+                            </button>
                         </div>
                     </div>
-
-                    <div class="flex gap-2 mb-2 sm:mb-3">
-                        <div class="flex-1 p-1.5 sm:p-2 rounded-lg sm:rounded-xl bg-stone-50 border border-stone-100">
-                            <span class="block text-[9px] sm:text-[10px] text-stone-400">Pieejamība</span>
-                            <span class="block text-xs sm:text-sm font-semibold text-stone-800">{{ activeFloorData.units }}</span>
-                        </div>
-                        <div class="flex-1 p-1.5 sm:p-2 rounded-lg sm:rounded-xl bg-stone-50 border border-stone-100">
-                            <span class="block text-[9px] sm:text-[10px] text-stone-400">Cena no</span>
-                            <span class="block text-xs sm:text-sm font-semibold text-stone-800">{{ activeFloorData.price.split(' - ')[0] }}</span>
-                        </div>
-                    </div>
-
-                    <button
-                        @click.stop="$emit('open-contact')"
-                        class="w-full py-2 sm:py-2.5 bg-stone-900 text-white text-xs sm:text-sm rounded-lg sm:rounded-xl font-semibold hover:bg-indigo-600 active:bg-indigo-700 transition-all duration-300 flex items-center justify-center gap-2"
-                    >
-                        <span>Sazināties</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 sm:h-4 sm:w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                        </svg>
-                    </button>
                 </div>
-            </div>
-        </transition>
-    </Teleport>
+            </Transition>
+        </Teleport>
+    </div>
 </template>
 
 <script setup>
@@ -194,10 +140,6 @@ const props = defineProps({
     selectedFloor: {
         type: Number,
         default: null
-    },
-    floorsData: {
-        type: Object,
-        default: () => ({})
     }
 });
 
@@ -209,22 +151,58 @@ const containerRef = ref(null);
 const imageLoaded = ref(false);
 const showCard = ref(false);
 const isMobile = ref(false);
+const floorsData = ref({});
+const isLoading = ref(true);
 
 const checkMobile = () => {
     isMobile.value = window.innerWidth < 1024;
 };
 
-onMounted(() => {
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-});
+const fetchFloors = async () => {
+    try {
+        const response = await fetch('/api/floors');
+        const data = await response.json();
+        // Convert array to object keyed by level for easier access
+        floorsData.value = data.reduce((acc, floor) => {
+            acc[floor.level] = floor;
+            return acc;
+        }, {});
+    } catch (error) {
+        console.error('Error fetching floors:', error);
+    } finally {
+        isLoading.value = false;
+    }
+};
 
-onUnmounted(() => {
-    window.removeEventListener('resize', checkMobile);
-});
+const formatPrice = (price) => {
+    if (!price) return '0';
+    return new Intl.NumberFormat('lv-LV').format(price / 100);
+};
 
-const onImageLoad = () => {
-    imageLoaded.value = true;
+const getStatusClass = (status) => {
+    switch (status) {
+        case 'available':
+            return 'bg-green-100 text-green-700';
+        case 'reserved':
+            return 'bg-yellow-100 text-yellow-700';
+        case 'sold':
+            return 'bg-red-100 text-red-700';
+        default:
+            return 'bg-stone-100 text-stone-700';
+    }
+};
+
+const getStatusLabel = (status) => {
+    switch (status) {
+        case 'available':
+            return 'Pieejams';
+        case 'reserved':
+            return 'Rezervēts';
+        case 'sold':
+            return 'Pārdots';
+        default:
+            return status;
+    }
 };
 
 const floors = {
@@ -235,42 +213,136 @@ const floors = {
     5: "54,777 977,746 1309,902 1309,936 1275,949 1428,1021 1432,1004 2049,987 2049,963 2405,956 2405,909 2368,905 2368,871 2500,685 3813,627 3813,502 3718,505 3721,482 3694,485 3674,498 3616,471 3555,498 3511,478 3579,437 3572,417 3518,417 2771,458 2724,465 2656,559 2507,566 2371,804 2368,814 2096,821 2096,831 2052,834 2052,868 1747,875 1737,861 1713,865 1720,878 1391,888 1394,868 1350,868 1343,858 1350,861 1313,858 1309,838 980,637 47,682 51,743"
 };
 
-const defaultFloorsData = {
-    1: { level: 1, status: 'Komerctelpas', units: '4 Vietas', price: '€2.5M - €5M', description: 'Premium klases tirdzniecības telpas ar augstu apmeklētāju plūsmu.' },
-    2: { level: 2, status: 'Biroji', units: '8 Biroji', price: '€1.2M - €3M', description: 'Mūsdienīgi biroji ar atvērtu plānojumu un dabisko apgaismojumu.' },
-    3: { level: 3, status: 'Dzīvokļi', units: '6 Dzīvokļi', price: '€850K - €2.1M', description: 'Luksusa dzīvokļi ar panorāmas skatu uz pilsētu.' },
-    4: { level: 4, status: 'Penthausi', units: '4 Penthausi', price: '€3.5M - €6M', description: 'Ekskluzīvi penthausi ar plašām terasēm un privātu liftu.' },
-    5: { level: 5, status: 'Sky Lounge', units: '2 Rezidences', price: '€8M - €12M', description: 'Izcilākās rezidences ar privātu baseinu un SPA zonu.' }
-};
-
 const activeFloor = computed(() => props.hoveredFloor || props.selectedFloor);
 const activeFloorData = computed(() => {
     if (!activeFloor.value) return null;
-    return props.floorsData[activeFloor.value] || defaultFloorsData[activeFloor.value];
+    return floorsData.value[activeFloor.value];
+});
+
+const containerDimensions = ref({ width: 0, height: 0 });
+const screenSize = ref('mobile'); // 'mobile' | 'tablet' | 'desktop'
+
+// Image natural dimensions (3840x2160)
+const IMAGE_WIDTH = 3840;
+const IMAGE_HEIGHT = 2160;
+const ASPECT_RATIO = IMAGE_WIDTH / IMAGE_HEIGHT;
+
+const updateContainerDimensions = () => {
+    if (containerRef.value) {
+        containerDimensions.value = {
+            width: containerRef.value.offsetWidth,
+            height: containerRef.value.offsetHeight
+        };
+    }
+    const width = window.innerWidth;
+    if (width >= 1024) {
+        screenSize.value = 'desktop';
+    } else if (width >= 600) {
+        screenSize.value = 'tablet';
+    } else {
+        screenSize.value = 'mobile';
+    }
+};
+
+// Wrapper style - different aspect ratios based on screen size
+// Heights calculated:
+// Desktop (>=1024): 16:9 → 576px at 1024px
+// Tablet (600-1024): 4:3 → 450px at 600px, 768px at 1024px
+// Mobile (<600): 1:1 → 375-600px (matches width)
+const wrapperStyle = computed(() => {
+    if (screenSize.value === 'desktop') {
+        return { aspectRatio: '16 / 9' };
+    }
+
+    if (screenSize.value === 'tablet') {
+        return { aspectRatio: '4 / 3' };
+    }
+
+    // Mobile: square ratio works well for phones
+    return { aspectRatio: '1 / 1' };
 });
 
 const svgStyle = computed(() => {
-    if (!imageRef.value) return {};
-    const img = imageRef.value;
+    const { width: containerWidth, height: containerHeight } = containerDimensions.value;
+    if (!containerWidth || !containerHeight) return {};
+
+    // For desktop with natural 16:9, SVG matches container exactly
+    if (screenSize.value === 'desktop') {
+        return { inset: '0' };
+    }
+
+    // For tablet/mobile with object-cover object-bottom, calculate SVG position
+    const scaleX = containerWidth / IMAGE_WIDTH;
+    const scaleY = containerHeight / IMAGE_HEIGHT;
+    const scale = Math.max(scaleX, scaleY);
+
+    const renderedWidth = IMAGE_WIDTH * scale;
+    const renderedHeight = IMAGE_HEIGHT * scale;
+
+    // Horizontal: centered, Vertical: bottom-aligned (matches object-bottom)
+    const offsetX = (renderedWidth - containerWidth) / 2;
+    const offsetY = renderedHeight - containerHeight;
+
     return {
-        width: `${img.offsetWidth}px`,
-        height: `${img.offsetHeight}px`,
-        left: '50%',
-        bottom: '0',
-        transform: 'translateX(-50%)'
+        width: `${renderedWidth}px`,
+        height: `${renderedHeight}px`,
+        left: `-${offsetX}px`,
+        top: `-${offsetY}px`
     };
 });
 
-const handleFloorHover = (floor, event) => {
+let resizeObserver = null;
+
+const handleEscapeKey = (e) => {
+    if (e.key === 'Escape' && showCard.value) {
+        closeCard();
+    }
+};
+
+onMounted(() => {
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    window.addEventListener('keydown', handleEscapeKey);
+    fetchFloors();
+
+    // Initialize ResizeObserver to track container size changes
+    if (containerRef.value) {
+        resizeObserver = new ResizeObserver(() => {
+            updateContainerDimensions();
+        });
+        resizeObserver.observe(containerRef.value);
+        updateContainerDimensions();
+    }
+});
+
+onUnmounted(() => {
+    window.removeEventListener('resize', checkMobile);
+    window.removeEventListener('keydown', handleEscapeKey);
+    if (resizeObserver) {
+        resizeObserver.disconnect();
+    }
+});
+
+const onImageLoad = () => {
+    imageLoaded.value = true;
+    updateContainerDimensions();
+    // Start observing if not already
+    if (!resizeObserver && containerRef.value) {
+        resizeObserver = new ResizeObserver(() => {
+            updateContainerDimensions();
+        });
+        resizeObserver.observe(containerRef.value);
+    }
+};
+
+const handleFloorHover = (floor) => {
     emit('hover-floor', floor);
-    showCard.value = true;
+    // Don't show card on hover anymore
 };
 
 const handleFloorLeave = () => {
     emit('hover-floor', null);
-    if (!props.selectedFloor) {
-        showCard.value = false;
-    }
+    // Don't hide card on leave if it was opened by click
 };
 
 const handleFloorClick = (floor) => {
@@ -281,12 +353,14 @@ const handleFloorClick = (floor) => {
 const closeCard = () => {
     showCard.value = false;
     emit('select-floor', null);
-    emit('hover-floor', null);
+    // Don't clear hover state immediately to prevent flickering if mouse is still there
 };
 
 watch(() => props.selectedFloor, (newVal) => {
     if (newVal) {
         showCard.value = true;
+    } else {
+        showCard.value = false;
     }
 });
 

@@ -1,6 +1,6 @@
 <template>
-    <nav :class="['fixed top-0 left-0 w-full z-50 transition-all duration-300 border-b', isScrolled ? 'bg-white/90 backdrop-blur-md py-4 border-stone-200 shadow-sm' : 'bg-transparent py-6 border-transparent']">
-        <div class="container mx-auto px-6 flex items-center justify-between">
+    <nav :class="['fixed top-0 left-0 w-full z-50 transition-all duration-300 border-b', isScrolled ? 'bg-white/90 backdrop-blur-md py-3 lg:py-4 border-stone-200 shadow-sm' : 'bg-transparent py-3 lg:py-5 border-transparent']">
+        <div class="container mx-auto px-4 lg:px-6 flex items-center justify-between">
             <a href="#" class="text-2xl font-bold tracking-tighter text-stone-800">
                 Skyline<span class="text-indigo-600">.</span>
             </a>
