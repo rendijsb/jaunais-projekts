@@ -60,11 +60,53 @@
                             <div class="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:20px_20px] opacity-50"></div>
 
                             <div class="absolute inset-0 flex items-center justify-center z-10">
-                                <img
-                                    :src="`/images/floor-plans/floor-${activeFloorData.level}.jpg`"
-                                    :alt="`${activeFloorData.level}. stāva plāns`"
-                                    class="w-full h-full object-contain drop-shadow-lg transition-transform duration-500 group-hover:scale-105"
-                                />
+                                <div class="relative w-full h-full flex items-center justify-center">
+                                    <img
+                                        ref="floorPlanRef"
+                                        :src="`/images/floor-plans/floor-${activeFloorData.level}.jpg`"
+                                        :alt="`${activeFloorData.level}. stāva plāns`"
+                                        class="max-w-full max-h-full object-contain drop-shadow-lg"
+                                        @load="onFloorPlanLoad"
+                                    />
+                                    <svg
+                                        v-if="currentFloorApartments.length && floorPlanLoaded"
+                                        class="absolute pointer-events-none"
+                                        :style="floorPlanSvgStyle"
+                                        :viewBox="floorPlanViewBox"
+                                        preserveAspectRatio="none"
+                                    >
+                                        <polygon
+                                            v-for="apartment in currentFloorApartments"
+                                            :key="apartment.id"
+                                            :points="apartment.coords"
+                                            :class="getApartmentClass(apartment)"
+                                            class="pointer-events-auto"
+                                            @mouseenter="hoveredApartment = apartment"
+                                            @mouseleave="hoveredApartment = null"
+                                        />
+                                    </svg>
+                                    <Transition
+                                        enter-active-class="transition duration-200 ease-out"
+                                        enter-from-class="opacity-0 translate-y-1"
+                                        enter-to-class="opacity-100 translate-y-0"
+                                        leave-active-class="transition duration-150 ease-in"
+                                        leave-from-class="opacity-100 translate-y-0"
+                                        leave-to-class="opacity-0 translate-y-1"
+                                    >
+                                        <div
+                                            v-if="hoveredApartment"
+                                            class="absolute top-4 left-4 bg-white/95 backdrop-blur-sm rounded-xl shadow-xl p-4 z-20 min-w-48"
+                                        >
+                                            <div class="text-xs font-medium text-stone-400 uppercase tracking-wider mb-1">Dzīvoklis</div>
+                                            <div class="text-2xl font-semibold text-stone-900 mb-2">{{ hoveredApartment.id }}</div>
+                                            <div class="flex items-center gap-2">
+                                                <span :class="['px-2 py-1 rounded-full text-xs font-medium', getStatusClass(hoveredApartment.status)]">
+                                                    {{ getStatusLabel(hoveredApartment.status) }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </Transition>
+                                </div>
                             </div>
 
                             <div class="absolute -bottom-6 -left-4 text-[10rem] font-bold text-stone-200/50 leading-none select-none pointer-events-none">
@@ -148,11 +190,47 @@ const emit = defineEmits(['select-floor', 'hover-floor', 'open-contact']);
 const imageRef = ref(null);
 const imageContainerRef = ref(null);
 const containerRef = ref(null);
+const floorPlanRef = ref(null);
 const imageLoaded = ref(false);
+const floorPlanLoaded = ref(false);
+const floorPlanDimensions = ref({ width: 0, height: 0 });
 const showCard = ref(false);
 const isMobile = ref(false);
 const floorsData = ref({});
 const isLoading = ref(true);
+const hoveredApartment = ref(null);
+
+const FLOOR_PLAN_WIDTH = 8928;
+const FLOOR_PLAN_HEIGHT = 4751;
+const floorPlanViewBox = `0 0 ${FLOOR_PLAN_WIDTH} ${FLOOR_PLAN_HEIGHT}`;
+
+const apartmentCoords = {
+    1: {
+        101: "1439,3283 761,3283 753,3315 698,3315 698,3299 114,3299 122,2107 1147,2107 1155,2178 1447,2178",
+        102: "1360,2068 1218,2076 1211,2115 114,2115 122,592 2149,592 2141,994 1826,994 1818,1215 1613,1215 1613,2312 1447,2312 1447,2115 1360,2115",
+        103: "2252,2952 2252,1476 2133,1476 2141,994 1889,1002 1889,1215 2007,1215 2015,1286 1857,1286 1849,1231 1613,1231 1621,2960",
+        104: "4689,923 4689,2123 5525,2123 5525,1010 5028,1010 5028,931",
+        105: "2141,616 2133,1476 2259,1476 2252,2139 4334,2139 4334,1523 4499,1515 4499,1460 4484,1460 4491,1002 4491,639 4499,639 4499,616",
+        106: "6810,3252 6029,3259 6029,3228 5485,3236 5485,2533 6006,2533 6006,2328 6802,2328",
+    }
+};
+
+const getFloorApartments = (floorLevel) => {
+    const floorData = floorsData.value[floorLevel];
+    const coords = apartmentCoords[floorLevel];
+    if (!floorData || !coords) return [];
+
+    return floorData.properties
+        .filter(prop => coords[prop.flat_number])
+        .map(prop => ({
+            id: prop.flat_number,
+            coords: coords[prop.flat_number],
+            status: prop.status,
+            price: prop.price,
+            flat_area: prop.flat_area,
+            total_area: prop.total_area,
+        }));
+};
 
 const checkMobile = () => {
     isMobile.value = window.innerWidth < 1024;
@@ -219,10 +297,14 @@ const activeFloorData = computed(() => {
     return floorsData.value[activeFloor.value];
 });
 
-const containerDimensions = ref({ width: 0, height: 0 });
-const screenSize = ref('mobile'); // 'mobile' | 'tablet' | 'desktop'
+const currentFloorApartments = computed(() => {
+    if (!activeFloor.value) return [];
+    return getFloorApartments(activeFloor.value);
+});
 
-// Image natural dimensions (3840x2160)
+const containerDimensions = ref({ width: 0, height: 0 });
+const screenSize = ref('mobile');
+
 const IMAGE_WIDTH = 3840;
 const IMAGE_HEIGHT = 2160;
 const ASPECT_RATIO = IMAGE_WIDTH / IMAGE_HEIGHT;
@@ -244,11 +326,6 @@ const updateContainerDimensions = () => {
     }
 };
 
-// Wrapper style - different aspect ratios based on screen size
-// Heights calculated:
-// Desktop (>=1024): 16:9 → 576px at 1024px
-// Tablet (600-1024): 4:3 → 450px at 600px, 768px at 1024px
-// Mobile (<600): 1:1 → 375-600px (matches width)
 const wrapperStyle = computed(() => {
     if (screenSize.value === 'desktop') {
         return { aspectRatio: '16 / 9' };
@@ -258,7 +335,6 @@ const wrapperStyle = computed(() => {
         return { aspectRatio: '4 / 3' };
     }
 
-    // Mobile: square ratio works well for phones
     return { aspectRatio: '1 / 1' };
 });
 
@@ -266,12 +342,10 @@ const svgStyle = computed(() => {
     const { width: containerWidth, height: containerHeight } = containerDimensions.value;
     if (!containerWidth || !containerHeight) return {};
 
-    // For desktop with natural 16:9, SVG matches container exactly
     if (screenSize.value === 'desktop') {
         return { inset: '0' };
     }
 
-    // For tablet/mobile with object-cover object-bottom, calculate SVG position
     const scaleX = containerWidth / IMAGE_WIDTH;
     const scaleY = containerHeight / IMAGE_HEIGHT;
     const scale = Math.max(scaleX, scaleY);
@@ -279,7 +353,6 @@ const svgStyle = computed(() => {
     const renderedWidth = IMAGE_WIDTH * scale;
     const renderedHeight = IMAGE_HEIGHT * scale;
 
-    // Horizontal: centered, Vertical: bottom-aligned (matches object-bottom)
     const offsetX = (renderedWidth - containerWidth) / 2;
     const offsetY = renderedHeight - containerHeight;
 
@@ -305,7 +378,6 @@ onMounted(() => {
     window.addEventListener('keydown', handleEscapeKey);
     fetchFloors();
 
-    // Initialize ResizeObserver to track container size changes
     if (containerRef.value) {
         resizeObserver = new ResizeObserver(() => {
             updateContainerDimensions();
@@ -326,7 +398,6 @@ onUnmounted(() => {
 const onImageLoad = () => {
     imageLoaded.value = true;
     updateContainerDimensions();
-    // Start observing if not already
     if (!resizeObserver && containerRef.value) {
         resizeObserver = new ResizeObserver(() => {
             updateContainerDimensions();
@@ -337,12 +408,10 @@ const onImageLoad = () => {
 
 const handleFloorHover = (floor) => {
     emit('hover-floor', floor);
-    // Don't show card on hover anymore
 };
 
 const handleFloorLeave = () => {
     emit('hover-floor', null);
-    // Don't hide card on leave if it was opened by click
 };
 
 const handleFloorClick = (floor) => {
@@ -353,7 +422,6 @@ const handleFloorClick = (floor) => {
 const closeCard = () => {
     showCard.value = false;
     emit('select-floor', null);
-    // Don't clear hover state immediately to prevent flickering if mouse is still there
 };
 
 watch(() => props.selectedFloor, (newVal) => {
@@ -377,6 +445,71 @@ const getFloorClass = (floor) => {
         }
     ];
 };
+
+const onFloorPlanLoad = () => {
+    floorPlanLoaded.value = true;
+    if (floorPlanRef.value) {
+        floorPlanDimensions.value = {
+            width: floorPlanRef.value.offsetWidth,
+            height: floorPlanRef.value.offsetHeight
+        };
+    }
+};
+
+const floorPlanSvgStyle = computed(() => {
+    const { width, height } = floorPlanDimensions.value;
+    if (!width || !height) return {};
+
+    return {
+        width: `${width}px`,
+        height: `${height}px`,
+        left: '50%',
+        top: '50%',
+        transform: 'translate(-50%, -50%)'
+    };
+});
+
+const getApartmentClass = (apartment) => {
+    const isHovered = hoveredApartment.value?.id === apartment.id;
+    const statusColors = {
+        available: {
+            hover: 'fill-emerald-500/40 stroke-emerald-500 stroke-2',
+            base: 'fill-transparent stroke-transparent hover:fill-emerald-500/30 hover:stroke-emerald-500 hover:stroke-2'
+        },
+        reserved: {
+            hover: 'fill-amber-500/40 stroke-amber-500 stroke-2',
+            base: 'fill-transparent stroke-transparent hover:fill-amber-500/30 hover:stroke-amber-500 hover:stroke-2'
+        },
+        sold: {
+            hover: 'fill-red-500/40 stroke-red-500 stroke-2',
+            base: 'fill-transparent stroke-transparent hover:fill-red-500/30 hover:stroke-red-500 hover:stroke-2'
+        }
+    };
+
+    const colors = statusColors[apartment.status] || statusColors.available;
+
+    return [
+        'cursor-pointer',
+        'transition-all duration-200',
+        isHovered ? colors.hover : colors.base
+    ];
+};
+
+watch(showCard, (newVal) => {
+    const currentCount = parseInt(document.body.dataset.modalCount || '0', 10);
+    if (newVal) {
+        document.body.dataset.modalCount = String(currentCount + 1);
+        document.body.style.overflow = 'hidden';
+    } else {
+        const newCount = Math.max(0, currentCount - 1);
+        document.body.dataset.modalCount = String(newCount);
+        if (newCount === 0) {
+            document.body.style.overflow = '';
+        }
+        floorPlanLoaded.value = false;
+        hoveredApartment.value = null;
+    }
+});
 </script>
 
 <style scoped>

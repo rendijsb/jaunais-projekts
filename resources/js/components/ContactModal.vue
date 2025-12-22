@@ -1,13 +1,14 @@
 <template>
-    <transition
-        enter-active-class="transition duration-300 ease-out"
-        enter-from-class="opacity-0"
-        enter-to-class="opacity-100"
-        leave-active-class="transition duration-200 ease-in"
-        leave-from-class="opacity-100"
-        leave-to-class="opacity-0"
-    >
-        <div v-if="isOpen" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-stone-900/60 backdrop-blur-sm" @click.self="$emit('close')">
+    <Teleport to="body">
+        <transition
+            enter-active-class="transition duration-300 ease-out"
+            enter-from-class="opacity-0"
+            enter-to-class="opacity-100"
+            leave-active-class="transition duration-200 ease-in"
+            leave-from-class="opacity-100"
+            leave-to-class="opacity-0"
+        >
+            <div v-if="isOpen" class="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-stone-900/60 backdrop-blur-sm" @click.self="$emit('close')">
             <transition
                 enter-active-class="transition duration-300 ease-out"
                 enter-from-class="opacity-0 scale-95 translate-y-4"
@@ -54,14 +55,31 @@
                     </div>
                 </div>
             </transition>
-        </div>
-    </transition>
+            </div>
+        </transition>
+    </Teleport>
 </template>
 
 <script setup>
-defineProps({
+import { watch } from 'vue';
+
+const props = defineProps({
     isOpen: Boolean
 });
 
 defineEmits(['close']);
+
+watch(() => props.isOpen, (isOpen) => {
+    const currentCount = parseInt(document.body.dataset.modalCount || '0', 10);
+    if (isOpen) {
+        document.body.dataset.modalCount = String(currentCount + 1);
+        document.body.style.overflow = 'hidden';
+    } else {
+        const newCount = Math.max(0, currentCount - 1);
+        document.body.dataset.modalCount = String(newCount);
+        if (newCount === 0) {
+            document.body.style.overflow = '';
+        }
+    }
+}, { immediate: true });
 </script>
