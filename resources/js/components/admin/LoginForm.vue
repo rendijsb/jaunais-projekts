@@ -2,7 +2,7 @@
     <div class="min-h-screen flex items-center justify-center px-4 py-12 bg-noise">
         <div class="w-full max-w-md">
             <div class="text-center mb-8">
-                <h1 class="text-3xl font-bold text-stone-800">Modern Living</h1>
+                <h1 class="text-3xl font-bold text-stone-800">Liedega Nams</h1>
                 <p class="text-stone-500 mt-2">Administrācijas panelis</p>
             </div>
 
@@ -81,7 +81,7 @@
             </div>
 
             <p class="text-center text-sm text-stone-500 mt-8">
-                &copy; {{ currentYear }} Modern Living. Visas tiesības aizsargātas.
+                &copy; {{ currentYear }} Liedega Nams. Visas tiesības aizsargātas.
             </p>
         </div>
     </div>

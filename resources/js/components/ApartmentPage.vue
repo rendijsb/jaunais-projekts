@@ -11,7 +11,7 @@
                     </a>
                 </div>
                 <a href="/" class="text-2xl font-bold tracking-tighter text-stone-800">
-                    Skyline<span class="text-indigo-600">.</span>
+                    Liedega Nams<span class="text-indigo-600">.</span>
                 </a>
                 <div class="w-20"></div>
             </div>
@@ -186,7 +186,7 @@
                                     <div class="text-sm text-stone-500">Zvanīt tagad</div>
                                 </div>
                             </a>
-                            <a href="mailto:info@skyline.lv" class="flex items-center gap-3 p-4 bg-stone-50 rounded-xl hover:bg-stone-100 transition-colors">
+                            <a href="mailto:info@fourestate.lv" class="flex items-center gap-3 p-4 bg-stone-50 rounded-xl hover:bg-stone-100 transition-colors">
                                 <div class="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />

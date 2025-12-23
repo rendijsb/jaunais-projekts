@@ -13,7 +13,7 @@
                         Dzīve <span class="font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600">Virsotnē</span>
                     </h2>
                     <p class="text-stone-600 text-lg leading-relaxed mb-8 font-light">
-                        Skyline Tornis ir jauns orientieris pilsētas siluetā. Mēs piedāvājam ne tikai dzīvokļus, bet dzīvesveidu, kurā apvienojas mūsdienu arhitektūra, tehnoloģijas un komforts.
+                        Liedega Nams ir jauns orientieris pilsētas siluetā. Mēs piedāvājam ne tikai dzīvokļus, bet dzīvesveidu, kurā apvienojas mūsdienu arhitektūra, tehnoloģijas un komforts.
                     </p>
                     <p class="text-stone-600 text-lg leading-relaxed mb-12 font-light">
                         Katra detaļa ir pārdomāta, lai nodrošinātu jums vislabāko dzīves pieredzi – no elpu aizraujošiem skatiem līdz privātam konsjerža servisam.
@@ -47,7 +47,7 @@
                         </div>
 
                         <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-                            <span class="text-2xl font-light text-stone-500/30 uppercase tracking-[1em] -rotate-90">Skyline</span>
+                            <span class="text-2xl font-light text-stone-500/30 uppercase tracking-[1em] -rotate-90">Liedega Nams</span>
                         </div>
                     </div>
 

@@ -7,7 +7,7 @@
                         Ieskats <span class="font-bold">Nākotnē</span>
                     </h2>
                     <p class="text-stone-600 text-lg font-light">
-                        Izpētiet mūsu rūpīgi izstrādātos interjerus un elpu aizraujošos skatus, kas paveras no Skyline Torņa.
+                        Izpētiet mūsu rūpīgi izstrādātos interjerus un elpu aizraujošos skatus, kas paveras no Liedega Nams.
                     </p>
                 </div>
                 <div class="hidden md:block">

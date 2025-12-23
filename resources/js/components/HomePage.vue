@@ -17,8 +17,7 @@
                             <span class="text-xs font-semibold tracking-widest uppercase text-stone-600">Premium Dzīvesveids</span>
                         </div>
                         <h1 class="text-3xl sm:text-4xl xl:text-5xl 2xl:text-6xl font-light mb-2 tracking-tight text-stone-800 leading-[0.95]">
-                            Skyline
-                            <span class="font-bold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600">Tornis</span>
+                            Liedega Nams
                         </h1>
                         <p class="text-stone-600 text-sm xl:text-base max-w-lg mx-auto leading-relaxed font-light mb-3">
                             Izvēlieties savu stāvu un atklājiet jaunas iespējas.

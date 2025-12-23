@@ -1,14 +1,14 @@
 <template>
     <footer class="bg-stone-950 border-t border-stone-900 pt-24 pb-12 relative overflow-hidden">
         <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none overflow-hidden">
-            <span class="absolute top-10 left-1/2 -translate-x-1/2 text-[20vw] font-bold text-stone-900/30 tracking-tighter leading-none select-none">SKYLINE</span>
+            <span class="absolute top-10 left-1/2 -translate-x-1/2 text-[20vw] font-bold text-stone-900/30 tracking-tighter leading-none select-none">Liedega Nams</span>
         </div>
 
         <div class="container mx-auto px-6 relative z-10">
             <div class="grid grid-cols-1 md:grid-cols-12 gap-12 mb-20">
                 <div class="md:col-span-5">
                     <a href="#" class="text-4xl font-bold tracking-tighter text-white mb-8 block">
-                        Skyline<span class="text-indigo-500">.</span>
+                        Liedega Nams<span class="text-indigo-500">.</span>
                     </a>
                     <p class="text-stone-400 max-w-md mb-8 text-lg font-light leading-relaxed">
                         Jūsu jaunās mājas pilsētas sirdī. Izbaudiet komfortu, drošību un elpu aizraujošus skatus katru dienu.
@@ -56,7 +56,7 @@
 
             <div class="border-t border-stone-900 pt-8 flex flex-col md:flex-row justify-between items-center">
                 <p class="text-stone-600 text-sm mb-4 md:mb-0">
-                    &copy; {{ new Date().getFullYear() }} Skyline Tornis. Visas tiesības aizsargātas.
+                    &copy; {{ new Date().getFullYear() }} Liedega Nams. Visas tiesības aizsargātas.
                 </p>
                 <div class="flex space-x-8 text-sm text-stone-600">
                     <a href="#" class="hover:text-white transition-colors">Privātuma Politika</a>

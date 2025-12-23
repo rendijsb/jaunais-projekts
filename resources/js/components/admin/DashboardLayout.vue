@@ -5,7 +5,7 @@
             <div class="flex flex-col h-full">
                 <!-- Logo -->
                 <div class="px-6 py-5 border-b border-stone-700/50">
-                    <h1 class="text-xl font-bold tracking-tight">Modern Living</h1>
+                    <h1 class="text-xl font-bold tracking-tight">Liedega Nams</h1>
                     <p class="text-stone-400 text-xs mt-0.5">Administrācijas panelis</p>
                 </div>
 
@@ -58,7 +58,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
                     </button>
-                    <h1 class="font-semibold text-stone-900">Modern Living</h1>
+                    <h1 class="font-semibold text-stone-900">Liedega Nams</h1>
                 </div>
                 <div class="w-8 h-8 rounded-full bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-stone-900 font-semibold text-xs">
                     {{ userInitials }}
@@ -76,7 +76,7 @@
                 <div class="flex flex-col h-full">
                     <div class="px-6 py-5 border-b border-stone-700/50 flex items-center justify-between">
                         <div>
-                            <h1 class="text-xl font-bold tracking-tight">Modern Living</h1>
+                            <h1 class="text-xl font-bold tracking-tight">Liedega Nams</h1>
                             <p class="text-stone-400 text-xs mt-0.5">Administrācijas panelis</p>
                         </div>
                         <button @click="mobileMenuOpen = false" class="p-1 text-stone-400 hover:text-white">
