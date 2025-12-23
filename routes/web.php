@@ -9,6 +9,33 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/dzivoklis/{flatNumber}', function ($flatNumber) {
+    $property = Property::where('flat_number', $flatNumber)->first();
+    if (!$property) {
+        abort(404);
+    }
+    return view('apartment', ['flatNumber' => $flatNumber]);
+})->name('apartment.show');
+
+Route::get('/api/apartment/{flatNumber}', function ($flatNumber) {
+    $property = Property::where('flat_number', $flatNumber)->first();
+    if (!$property) {
+        return response()->json(['error' => 'Apartment not found'], 404);
+    }
+
+    return response()->json([
+        'id' => $property->id,
+        'flat_number' => $property->flat_number,
+        'floor' => $property->floor,
+        'flat_area' => $property->flat_area,
+        'total_area' => $property->total_area,
+        'terrace_area' => $property->terrace_area,
+        'balcony_area' => $property->balcony_area,
+        'price' => $property->price,
+        'status' => $property->status,
+    ]);
+});
+
 Route::get('/api/floors', function () {
     $properties = Property::all();
 

@@ -83,6 +83,7 @@
                                             class="pointer-events-auto"
                                             @mouseenter="hoveredApartment = apartment"
                                             @mouseleave="hoveredApartment = null"
+                                            @click="goToApartment(apartment.id)"
                                         />
                                     </svg>
                                     <Transition
@@ -422,6 +423,10 @@ const handleFloorClick = (floor) => {
 const closeCard = () => {
     showCard.value = false;
     emit('select-floor', null);
+};
+
+const goToApartment = (flatNumber) => {
+    window.location.href = `/dzivoklis/${flatNumber}`;
 };
 
 watch(() => props.selectedFloor, (newVal) => {
